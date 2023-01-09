@@ -48,11 +48,11 @@ class LocationService: NSObject, ObservableObject, CLLocationManagerDelegate {
      }
      
      func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-         locationManager.stopUpdatingHeading()
          guard let location = locations.last else {
              locationManager.startUpdatingHeading()
              return
          }
+         locationManager.stopUpdatingLocation()
          lastLocation = location
      }
  }

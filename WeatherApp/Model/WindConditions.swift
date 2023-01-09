@@ -27,12 +27,3 @@ struct WindConditions: Codable {
 }
 
 
-
-
-//"wind": {
-//        "speed": 0.62,
-//        "deg": 349,
-//        "gust": 1.18
-//      }
-
-
