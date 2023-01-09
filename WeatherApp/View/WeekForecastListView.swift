@@ -26,44 +26,44 @@ struct WeekForecastListView: View {
     private var backgroundView: some View {
         Rectangle()
             .fill(Constants.backgroundColor)
-            .edgesIgnoringSafeArea([.leading, .trailing])
+            .ignoresSafeArea()
     }
     
     private var listView: some View {
-        ScrollView(.vertical, showsIndicators: false) {
-            VStack(spacing: 10) {
-                ForEach(weather, id: \.first!.id) { item in
-                    if let weather = item.first {
-                        HStack {
-                            Text(dateFrom(unixtimeInterval: weather.date, format: "EE"))
-                                .font(.system(size: 20))
-                            Spacer()
-                            Text("\(Int(weather.main.tempMin))°/\(Int(weather.main.tempMax))°")
-                                .font(.system(size: 20))
-                            Spacer()
-                            if let image = weather.weather.first {
-                                Image(image.weatherCode)
-                                    .resizable()
-                                    .renderingMode(.template)
-                                    .scaledToFit()
-                                    .frame(width: 30, height: 30)
-                            }
-                        }
-                        .padding([.leading, .trailing], 10)
-                        .foregroundColor(weather.id == selectedRow?.id ? Color.borderColor : Color.mainBlack)
-                        .frame(height: 60)
-                        .background(
-                            Rectangle()
-                                .fill(Color.mainWhite)
-                                .shadow(color: weather.id == selectedRow?.id ? Color.borderColor : Color.mainWhite, radius: 5)
-                        )
-                        .onTapGesture {
-                            selectedRow = weather
+        VStack(spacing: 10) {
+            ForEach(weather, id: \.first!.id) { item in
+                if let weather = item.first {
+                    HStack {
+                        Text(dateFrom(unixtimeInterval: weather.date, format: "EE"))
+                            .font(.system(size: 20))
+                        Spacer()
+                        Text("\(Int(weather.main.tempMin))°/\(Int(weather.main.tempMax))°")
+                            .font(.system(size: 20))
+                        Spacer()
+                        if let image = weather.weather.first {
+                            Image(image.weatherCode)
+                                .resizable()
+                                .renderingMode(.template)
+                                .scaledToFit()
+                                .frame(width: 30, height: 30)
                         }
                     }
+                    .padding([.leading, .trailing], 10)
+                    .foregroundColor(weather.id == selectedRow?.id ? Color.borderColor : Color.mainBlack)
+                    .frame(height: 90)
+                    .background(
+                        Rectangle()
+                            .fill(Color.mainWhite)
+                            .shadow(color: weather.id == selectedRow?.id ? Color.borderColor : Color.mainWhite, radius: 5)
+                    )
+                    .onTapGesture {
+                        selectedRow = weather
+                    }
                 }
-            }.offset(y: 5)
+            }
         }
+        .offset(y: 5)
+        .padding(.bottom, 10)
     }
 }
 

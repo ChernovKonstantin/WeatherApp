@@ -25,49 +25,51 @@ struct ContentView: View {
     private var backgroundView: some View {
         Rectangle()
             .fill(Constants.backgroundColor)
-            .edgesIgnoringSafeArea([.leading, .trailing, .top])
+            .ignoresSafeArea()
     }
     
     @ViewBuilder
     private var contentView: some View {
-        VStack(spacing: 0) {
-            topView
-            if let selectedWeather = viewModel.selectedWeather {
-                DayForecastScrollView(weather: selectedWeather)
+        ZStack {
+            backgroundView
+            ScrollView(.vertical, showsIndicators: false) {
+                VStack(spacing: 0) {
+                    topView
+                    if let selectedWeather = viewModel.selectedWeather {
+                        DayForecastScrollView(weather: selectedWeather)
+                    }
+                    WeekForecastListView(weather: viewModel.dailyForecast, selectedRow: $viewModel.weatherCurrent)
+                }
             }
-            WeekForecastListView(weather: viewModel.dailyForecast, selectedRow: $viewModel.weatherCurrent)
         }
     }
     
     @ViewBuilder
     private var topView: some View {
         if let weather = viewModel.weatherCurrent, let image = weather.weather.first {
-            ZStack {
-                backgroundView
-                VStack(spacing: 0) {
-                    HStack {
-                        LocationNameView(location: viewModel.locationName,
-                                         date: dateFrom(unixtimeInterval: weather.date),
-                                         action: AnyView(AddressSearchView(viewModel: viewModel.searchManager)))
+            VStack(spacing: 0) {
+                HStack {
+                    LocationNameView(location: viewModel.locationName,
+                                     date: dateFrom(unixtimeInterval: weather.date),
+                                     action: AnyView(AddressSearchView(viewModel: viewModel.searchManager)))
+                    Spacer()
+                    VStack {
+                        NavigationLink(destination: {
+                            WeatherMapView(location: $viewModel.locationManager.lastLocation)
+                                .ignoresSafeArea()
+                        }, label: {
+                            Image("location")
+                        })
+                        .padding()
                         Spacer()
-                        VStack {
-                            NavigationLink(destination: {
-                                WeatherMapView(location: $viewModel.locationManager.lastLocation)
-                                    .ignoresSafeArea()
-                            }, label: {
-                                Image("location")
-                            })
-                            .padding()
-                            Spacer()
-                        }
-                        
                     }
-                    WeatherConditionsView(imageName: image.weatherCode,
-                                          tempMin: weather.main.tempMin,
-                                          tempMax: weather.main.tempMax,
-                                          humidity: weather.main.humidity,
-                                          wind: weather.wind)
+                    
                 }
+                WeatherConditionsView(imageName: image.weatherCode,
+                                      tempMin: weather.main.tempMin,
+                                      tempMax: weather.main.tempMax,
+                                      humidity: weather.main.humidity,
+                                      wind: weather.wind)
             }
         }
     }

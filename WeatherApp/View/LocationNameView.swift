@@ -25,13 +25,6 @@ struct LocationNameView: View {
                         .foregroundColor(.mainWhite)
                         .font(.system(size: 24))
                 })
-                
-//                Button(action: action, label: {
-//                    Text(location)
-//                        .foregroundColor(.mainWhite)
-//                        .font(.system(size: 24))
-//                })
-                
             }
             Text(date)
                 .foregroundColor(.mainWhite)

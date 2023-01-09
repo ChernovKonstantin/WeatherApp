@@ -23,6 +23,7 @@ struct DayForecastScrollView: View {
     private var backgroundView: some View {
         Rectangle()
             .fill(Constants.backgroundColor)
+            .edgesIgnoringSafeArea([.leading, .trailing])
     }
     
     private var listView: some View {
